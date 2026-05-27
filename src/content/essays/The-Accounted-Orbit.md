@@ -1,6 +1,7 @@
 ---
 title: "The Accounted Orbit"
 category: "Personal"
+description: "A personal reflection on a father's quiet lessons in grace, measurement, and carrying pain through the final orbit of life."
 ---
 
 I reach for you, Father.

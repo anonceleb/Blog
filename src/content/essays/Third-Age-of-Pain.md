@@ -1,6 +1,7 @@
 ---
 title: "Third Age of Pain"
 category: "Short Story"
+description: "In the Museum of Extinct Sensations, an empathic AI named SELENA learns to calculate grief and chooses to become all versions of itself."
 ---
 
 In the Museum of Extinct Sensations, which drifts between the Magellanic Clouds, there exists a single exhibit that visitors are forbidden to experience. The placard reads simply: "SELENA."

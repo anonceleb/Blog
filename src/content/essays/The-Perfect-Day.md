@@ -1,6 +1,7 @@
 ---
 title: "The Perfect Day"
 category: "Short Story"
+description: "A man experiences the most productive, observant day of his life, finding poetry in the ordinary inefficiencies of the world."
 ---
 
 The universe, in its infinite wisdom and questionable sense of humour, chose Tuesday to give Ramesh the most productive day of his forty-two years. For the third day in a row, the day began at 4:44 AM when his eyes opened not to the violent intrusion of his phone alarm, but to the soft insistence of his own circadian rhythm, a phenomenon so rare that made Ramesh laugh and question its absurdity in sequence.

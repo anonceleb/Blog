@@ -1,6 +1,7 @@
 ---
 title: "Unmaking"
 category: "Short Story"
+description: "On a planet where time and entropy run backwards, a xenolinguist must learn to think in reverse to survive the research mission."
 ---
 
 I have learned to think backwards. Not metaphorically, as one might when solving a puzzle, but rather literally. My thoughts now flow from consequence to cause, from ending to beginning. It is the only way to survive on Oros. Unconventional. Unintuitive. Obtuse.

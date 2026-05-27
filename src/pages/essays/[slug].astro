@@ -19,7 +19,12 @@ const formattedDate = entry.data.date
   : null;
 ---
 
-<Layout title={entry.data.title} description={entry.data.description}>
+<Layout
+  title={entry.data.title}
+  description={entry.data.description}
+  publishedTime={entry.data.date}
+  type="article"
+>
   <article>
     <div class="post-header">
       <h1>{entry.data.title}</h1>

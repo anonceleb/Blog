@@ -1,0 +1,95 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  publishedTime?: Date | string;
+  type?: 'website' | 'article';
+  canonical?: string;
+}
+
+const {
+  title: pageTitle,
+  description,
+  publishedTime,
+  type = 'website',
+  canonical: canonicalProp,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://ashwin-kumar.com');
+const siteName = 'Fiction';
+const authorName = 'Ashwin Kumar';
+const defaultDescription = 'Stories and notes.';
+
+const title = pageTitle && pageTitle !== siteName ? `${pageTitle} · ${siteName}` : (pageTitle || siteName);
+const desc = description || defaultDescription;
+
+// Compute canonical with proper trailing slash handling
+let canonicalURL: string;
+if (canonicalProp) {
+  canonicalURL = canonicalProp;
+} else {
+  const pathname = Astro.url.pathname;
+  canonicalURL = new URL(pathname.endsWith('/') ? pathname : pathname + '/', site).toString();
+}
+
+// Format published time for meta tags if present
+const publishedISO = publishedTime
+  ? (typeof publishedTime === 'string' ? publishedTime : publishedTime.toISOString())
+  : null;
+
+// JSON-LD for articles (only on essay pages)
+const jsonLd = type === 'article' ? {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle || siteName,
+  description: desc,
+  author: {
+    '@type': 'Person',
+    name: authorName,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteName,
+  },
+  ...(publishedISO ? { datePublished: publishedISO } : {}),
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalURL,
+  },
+} : null;
+---
+
+<!-- Primary meta -->
+<title>{title}</title>
+<meta name="description" content={desc} />
+<meta name="author" content={authorName} />
+<meta name="robots" content="index, follow" />
+
+<!-- Canonical -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={siteName} />
+{type === 'article' && publishedISO && (
+  <meta property="og:article:published_time" content={publishedISO} />
+)}
+{type === 'article' && (
+  <meta property="og:article:author" content={authorName} />
+)}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={desc} />
+
+<!-- RSS -->
+<link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
+
+<!-- Article JSON-LD -->
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

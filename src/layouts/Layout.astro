@@ -1,13 +1,16 @@
 ---
 export interface Props {
-  title: string;
+  title?: string;
   description?: string;
+  publishedTime?: Date | string;
+  type?: 'website' | 'article';
 }
 
 import '../styles/global.css';
+import Head from '../components/Head.astro';
 
-const { title, description } = Astro.props;
-const siteTitle = "Fiction";
+const { title, description, publishedTime, type } = Astro.props;
+const siteTitle = 'Fiction';
 ---
 
 <!doctype html>
@@ -17,10 +20,7 @@ const siteTitle = "Fiction";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title} · {siteTitle}</title>
-    {description && <meta name="description" content={description} />}
-    <link rel="alternate" type="application/rss+xml" title={siteTitle} href="/rss.xml" />
+    <Head title={title} description={description} publishedTime={publishedTime} type={type} />
   </head>
   <body>
     <button id="theme-toggle" aria-label="Toggle dark mode">Dark</button>
@@ -29,8 +29,8 @@ const siteTitle = "Fiction";
       <div class="site-title">{siteTitle}</div>
       <nav>
         <a href="/">Home</a>
-        <a href="/categories">Categories</a>
-        <a href="/about">About</a>
+        <a href="/categories/">Categories</a>
+        <a href="/about/">About</a>
         <a href="/rss.xml">RSS</a>
       </nav>
       <div class="search-container">

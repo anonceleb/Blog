@@ -15,11 +15,11 @@ async function build() {
       const raw = await fs.readFile(p, 'utf8');
       const parsed = matter(raw);
       const title = parsed.data.title || f.replace(/\.md$/, '');
-      const slug = f.replace(/\.md$/, '');
+      const slug = f.replace(/\.md$/, '').toLowerCase();
       const description = parsed.data.description || '';
       const content = (parsed.content || '').replace(/\n+/g, ' ').replace(/[#>*`\[\]]/g, ' ').trim();
       const excerpt = description || content.slice(0, 250);
-      items.push({ title, slug, url: `/essays/${slug}`, excerpt });
+      items.push({ title, slug, url: `/essays/${slug}/`, excerpt });
     }
 
     await fs.mkdir(outDir, { recursive: true });

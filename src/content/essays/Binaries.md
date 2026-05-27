@@ -1,6 +1,7 @@
 ---
 title: "Binaries"
 category: "Fiction"
+description: "A man sustained by machines in a hospice above old Earth fights for his life through an AI surrogate in the final arbitration."
 ---
 
 In the seventeenth orbit above old Earth was a hospice, the Mercy of Twinkling Stars. Jean-Claude Seven lay suspended between breaths that were not his own. The machines sang his lungs into motion with a rhythm older than memory, newer than hope.
