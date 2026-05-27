@@ -8,11 +8,14 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build-search-index": "node ./scripts/generate-search-index.js",
+    "prebuild": "npm run build-search-index",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
-    "astro": "^6.3.8"
+    "astro": "^6.3.8",
+    "gray-matter": "^4.0.3"
   }
 }

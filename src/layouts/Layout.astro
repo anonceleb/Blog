@@ -7,7 +7,7 @@ export interface Props {
 import '../styles/global.css';
 
 const { title, description } = Astro.props;
-const siteTitle = "Essays";
+const siteTitle = "Fiction";
 ---
 
 <!doctype html>
@@ -33,6 +33,10 @@ const siteTitle = "Essays";
         <a href="/about">About</a>
         <a href="/rss.xml">RSS</a>
       </nav>
+      <div class="search-container">
+        <input id="search-input" type="search" placeholder="Search essays…" aria-label="Search essays" />
+        <div id="search-results" role="list"></div>
+      </div>
     </header>
 
     <slot />
@@ -72,6 +76,58 @@ const siteTitle = "Essays";
         const current = html.getAttribute('data-theme');
         setTheme(current === 'dark' ? 'light' : 'dark');
       });
+    </script>
+
+    <script type="module">
+      // Minimal client-side search (loads /search.json produced at build time)
+      async function loadIndex() {
+        try {
+          const res = await fetch('/search.json');
+          if (!res.ok) return [];
+          return await res.json();
+        } catch (e) { return []; }
+      }
+
+      function escapeHtml(s) {
+        return s.replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'})[c]);
+      }
+
+      (function() {
+        const input = document.getElementById('search-input');
+        const results = document.getElementById('search-results');
+        let index = null;
+
+        if (!input || !results) return;
+
+        input.addEventListener('input', async (ev) => {
+          const q = (ev.target.value || '').trim().toLowerCase();
+          if (!q) {
+            results.innerHTML = '';
+            results.style.display = 'none';
+            return;
+          }
+
+          if (!index) index = await loadIndex();
+
+          const matches = index.filter(item => {
+            const t = item.title || '';
+            const e = item.excerpt || '';
+            return t.toLowerCase().includes(q) || e.toLowerCase().includes(q);
+          }).slice(0, 12);
+
+          if (!matches.length) {
+            results.innerHTML = '<div class="no-results">No results</div>';
+            results.style.display = 'block';
+            return;
+          }
+
+          results.innerHTML = matches.map(item => {
+            return `<a class="search-result" role="listitem" href="${escapeHtml(item.url)}"><div class="search-title">${escapeHtml(item.title)}</div><div class="search-excerpt">${escapeHtml(item.excerpt || '')}</div></a>`;
+          }).join('');
+
+          results.style.display = 'block';
+        });
+      })();
     </script>
   </body>
 </html>

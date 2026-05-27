@@ -147,3 +147,14 @@ This setup removes all of that friction while still giving you a beautiful readi
 ## License
 
 Do whatever you want with it. It’s deliberately boring on purpose.
+
+## Repository & Deployment
+
+- **Git repository:** https://github.com/anonceleb/Blog
+- **Deployed to Vercel:** The site is deployed and content is hosted at https://ashwin-kumar.com
+
+Note: search requires a small index file generated from the local markdown files. This runs automatically before `npm run build` (via the `prebuild` script) but you can also run it manually with:
+
+```bash
+npm run build-search-index
+```
