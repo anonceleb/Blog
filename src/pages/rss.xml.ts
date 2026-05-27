@@ -13,15 +13,17 @@ export async function GET(context: APIContext) {
     return a.data.title.localeCompare(b.data.title);
   });
 
+  const site = context.site ? new URL(context.site).toString() : 'http://localhost:3000';
+
   return rss({
     title: 'Writing',
     description: 'Stories and notes',
-    site: context.site ?? 'https://example.com',
+    site,
     items: sorted.map((essay) => {
       const item: any = {
         title: essay.data.title,
         description: essay.data.description,
-        link: `/essays/${essay.id}/`,
+        link: new URL(`/essays/${essay.id}/`, site).toString(),
       };
       if (essay.data.date) {
         item.pubDate = essay.data.date;
