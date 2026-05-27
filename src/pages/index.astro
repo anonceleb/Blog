@@ -1,49 +1,51 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import fs from 'fs/promises';
+import path from 'path';
 
 const allEssays = await getCollection('essays');
 
-// Group by category, sort categories alphabetically, essays by title within groups
-const grouped = allEssays.reduce((acc, essay) => {
-  const cat = essay.data.category || 'Uncategorized';
-  if (!acc[cat]) acc[cat] = [];
-  acc[cat].push(essay);
-  return acc;
-}, {} as Record<string, typeof allEssays>);
-
-// Sort categories
-const categories = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
-
-// Within each category, sort essays by title (no dates on this page)
-for (const cat of categories) {
-  grouped[cat].sort((a, b) => a.data.title.localeCompare(b.data.title));
+// Show all essays in a single list, newest first by file modification time.
+// This lets newly added Markdown files appear at the top without requiring a `date` frontmatter.
+async function withMtime(entries) {
+  const cwd = process.cwd();
+  const base = path.join(cwd, 'src', 'content', 'essays');
+  const out = [];
+  for (const e of entries) {
+    const filePath = path.join(base, `${e.id}.md`);
+    let mtime = 0;
+    try {
+      const st = await fs.stat(filePath);
+      mtime = st.mtimeMs || st.ctimeMs || 0;
+    } catch (err) {
+      // ignore missing stat, fall back to 0
+    }
+    out.push({ entry: e, mtime });
+  }
+  out.sort((a, b) => b.mtime - a.mtime);
+  return out.map(i => i.entry);
 }
+
+const sortedEssays = await withMtime(allEssays);
 ---
 
 <Layout title="Home" description="A collection of essays and notes.">
   <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 60ch;">
-    A small collection of writing. No dates on this page — just the ideas.
+    A small collection of writing. Newest items appear first.
   </p>
 
-  {
-    categories.map((category) => (
-      <div class="category-group">
-        <h2>{category}</h2>
-        <ul class="essay-list">
-          {grouped[category].map((essay) => (
-            <li>
-              <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))
-  }
+  <ul class="essay-list">
+    {sortedEssays.map((essay) => (
+      <li>
+        <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
+      </li>
+    ))}
+  </ul>
 
   <hr />
 
   <p style="font-size: 0.9rem; color: var(--text-muted);">
-    {allEssays.length} essays. <a href="/categories">Browse by category</a> · <a href="/rss.xml">Subscribe via RSS</a>
+    {allEssays.length} essays. <a href="/rss.xml">Subscribe via RSS</a>
   </p>
 </Layout>

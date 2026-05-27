@@ -2,7 +2,7 @@
 
 Extremely clean, Vitalik Buterin-inspired static site built with the latest Astro (v6).
 
-- **Zero dates on the main listing page** — just the writing, grouped by category.
+- **Homepage lists newest-first** — drop a `.md` file in `src/content/essays/` and it appears at the top.
 - Add a new essay = drop a `.md` file in `src/content/essays/`.
 - Fully static. One-command deploy to Vercel, Netlify, or Cloudflare Pages.
 - ~300 lines of CSS total. No frameworks, no JS bloat beyond a 15-line dark mode toggle.
@@ -13,7 +13,7 @@ Extremely clean, Vitalik Buterin-inspired static site built with the latest Astr
 
 ```
 /dist/
-├── index.html                 # Grouped list of all essays (no dates)
+├── index.html                 # List of essays (newest first)
 ├── essays/<slug>/index.html   # Individual readable essay pages
 ├── categories/
 │   ├── index.html
@@ -60,9 +60,7 @@ That's it. No admin UI, no databases, no "publishing" step.
 
 ### Adding your old writings without dates dominating the page
 
-**Just leave the `date` field out of the frontmatter.**
-
-- On the homepage and category listings: **no date is ever shown** (by design).
+- You can leave the `date` field out of frontmatter; the homepage orders by file modification time so newly added files appear first.
 - On the individual essay page: if `date` is present it shows a small "12 Mar 2024 · See all essays" line. If absent, only the "See all essays" link appears.
 - The essay still appears in the correct category group and is fully searchable/indexable.
 
