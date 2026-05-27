@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const essays = await getCollection('essays');
+  const cats = [...new Set(essays.map(e => (e.data.category || 'Uncategorized').toLowerCase()))];
+  return cats.map((c) => ({ params: { category: c } }));
+}
+
+const { category } = Astro.params;
+const allEssays = await getCollection('essays');
+
+const filtered = allEssays
+  .filter((e) => (e.data.category || 'Uncategorized').toLowerCase() === category)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const displayName = filtered[0]?.data.category || category;
+---
+
+<Layout title={displayName} description={`Essays in ${displayName}`}>
+  <h1>{displayName}</h1>
+
+  <div class="category-nav">
+    <a href="/categories">All categories</a>
+  </div>
+
+  {filtered.length === 0 ? (
+    <p>No essays yet in this category.</p>
+  ) : (
+    <ul class="essay-list">
+      {filtered.map((essay) => (
+        <li>
+          <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <hr />
+  <p><a href="/">← All essays</a></p>
+</Layout>

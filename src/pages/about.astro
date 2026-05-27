@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About" description="A few words about this site and its author.">
+  <h1>About</h1>
+
+  <p>
+    This is a deliberately minimal place for writing. The design exists only to get out of the way.
+  </p>
+
+  <p>
+    New essays are added by dropping a Markdown file into the content folder. No CMS, no admin panel, no dates required on the listing page.
+  </p>
+
+  <h2>Colophon</h2>
+
+  <ul>
+    <li>Built with <a href="https://astro.build">Astro</a> (static output)</li>
+    <li>Typography and layout in ~250 lines of plain CSS</li>
+    <li>Dark mode respects your system preference and can be toggled</li>
+    <li>Table of contents is generated at build time (no JavaScript)</li>
+    <li>RSS feed at <a href="/rss.xml">/rss.xml</a></li>
+  </ul>
+
+  <p style="margin-top: 2rem;">
+    The source is just files. Clone it, write, and push.
+  </p>
+</Layout>

@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const allEssays = await getCollection('essays');
+
+const byCategory = allEssays.reduce((acc, e) => {
+  const cat = e.data.category || 'Uncategorized';
+  acc[cat] = (acc[cat] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const categories = Object.entries(byCategory).sort(([a], [b]) => a.localeCompare(b));
+---
+
+<Layout title="Categories" description="Browse essays by category.">
+  <h1>Categories</h1>
+
+  <div class="category-nav" style="border-bottom: none; margin-bottom: 2rem;">
+    {categories.map(([cat, count]) => (
+      <a href={`/categories/${encodeURIComponent(cat.toLowerCase())}/`}>
+        {cat} <span style="opacity:0.6">({count})</span>
+      </a>
+    ))}
+  </div>
+
+  <p style="color: var(--text-muted);">
+    Or return to the <a href="/">full grouped list</a>.
+  </p>
+</Layout>
