@@ -18,7 +18,7 @@ const filtered = allEssays
 const displayName = filtered[0]?.data.category || category;
 ---
 
-<Layout title={displayName} description={`Essays in ${displayName}`}>
+<Layout title={displayName} description={`Category: ${displayName}`}>
   <h1>{displayName}</h1>
 
   <div class="category-nav">
@@ -38,5 +38,5 @@ const displayName = filtered[0]?.data.category || category;
   )}
 
   <hr />
-  <p><a href="/">← All essays</a></p>
+  <p><a href="/">← All</a></p>
 </Layout>

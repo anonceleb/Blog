@@ -30,10 +30,8 @@ async function withMtime(entries) {
 const sortedEssays = await withMtime(allEssays);
 ---
 
-<Layout title="Home" description="A collection of essays and notes.">
-  <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 60ch;">
-    A small collection of writing. Newest items appear first.
-  </p>
+<Layout title="Home" description="A collection of stories and notes.">
+  
 
   <ul class="essay-list">
     {sortedEssays.map((essay) => (
@@ -46,6 +44,6 @@ const sortedEssays = await withMtime(allEssays);
   <hr />
 
   <p style="font-size: 0.9rem; color: var(--text-muted);">
-    {allEssays.length} essays. <a href="/rss.xml">Subscribe via RSS</a>
+    <a href="/rss.xml">Subscribe via RSS</a>
   </p>
 </Layout>

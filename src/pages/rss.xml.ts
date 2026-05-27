@@ -15,7 +15,7 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: 'Writing',
-    description: 'Essays and notes',
+    description: 'Stories and notes',
     site: context.site ?? 'https://example.com',
     items: sorted.map((essay) => {
       const item: any = {

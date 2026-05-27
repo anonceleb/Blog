@@ -25,12 +25,12 @@ const formattedDate = entry.data.date
       <h1>{entry.data.title}</h1>
       {formattedDate && (
         <div class="post-date">
-          {formattedDate} · <a href="/">See all essays</a>
+          {formattedDate} · <a href="/">See all</a>
         </div>
       )}
       {!formattedDate && (
         <div class="post-date">
-          <a href="/">See all essays</a>
+          <a href="/">See all</a>
         </div>
       )}
     </div>
@@ -54,7 +54,7 @@ const formattedDate = entry.data.date
   <hr />
 
   <p style="font-size: 0.9rem;">
-    <a href="/">← All essays</a>
+    <a href="/">← All</a>
     {entry.data.category && (
       <>
         {' '}·{' '}
