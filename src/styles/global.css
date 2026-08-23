@@ -11,8 +11,10 @@
   --code-bg: #f5f5f5;
 }
 
+/* Applies only when the reader has expressed no preference; an explicit
+   choice always sets data-theme, so this cannot fight the toggle. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme]) {
     --bg: #0d0d0d;
     --text: #e8e8e8;
     --text-muted: #999999;
@@ -506,4 +508,23 @@ footer a {
     text-align: left;
     margin-left: 0;
   }
+}
+
+/* Curated entry point above the index */
+.start-here {
+  margin: 0 0 2.5rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--text-muted);
+  max-width: 42em;
+}
+
+.start-here a {
+  font-style: normal;
+}
+
+/* Title-only listing (home page): the list is the scannable unit, so rows
+   stay tight. Listings that carry descriptions keep the roomier spacing. */
+.essay-list.compact li {
+  margin-bottom: 0.5rem;
 }

@@ -45,6 +45,31 @@ export function categorySlug(name: string) {
   return seriesSlug(name);
 }
 
+/**
+ * The "new here?" pointer on the home page. Kept as ids/names rather than prose
+ * so a rename or deletion fails the build instead of leaving a dead link.
+ */
+const START_HERE = {
+  essayId: 'the-perfect-day',
+  series: 'The Mercy of Twinkling Stars',
+};
+
+export async function getStartHere() {
+  const all = await getCollection('essays');
+
+  const essay = all.find((e) => e.id === START_HERE.essayId);
+  if (!essay) {
+    throw new Error(`START_HERE points at a missing story: ${START_HERE.essayId}`);
+  }
+
+  const series = all.filter((e) => e.data.series === START_HERE.series).sort(bySeriesOrder);
+  if (series.length === 0) {
+    throw new Error(`START_HERE points at a missing series: ${START_HERE.series}`);
+  }
+
+  return { essay, seriesName: START_HERE.series, seriesFirst: series[0] };
+}
+
 /** Every entry of a series, in reading order. */
 export async function getSeries(name: string) {
   const all = await getCollection('essays');

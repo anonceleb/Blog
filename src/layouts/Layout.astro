@@ -21,6 +21,18 @@ const siteTitle = 'Fiction';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <Head title={title} description={description} publishedTime={publishedTime} type={type} />
+    <script is:inline>
+      // Runs before first paint so the page never flashes the wrong theme.
+      // Only an explicit choice sets data-theme; otherwise the OS decides via CSS.
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'dark' || saved === 'light') {
+            document.documentElement.setAttribute('data-theme', saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <button id="theme-toggle" aria-label="Toggle dark mode">Dark</button>
@@ -45,37 +57,39 @@ const siteTitle = 'Fiction';
       Built with care · <a href="/rss.xml">RSS</a>
     </footer>
 
-    <script>
-      // Minimal dark mode toggle (no dependencies, ~15 lines)
-      const btn = document.getElementById('theme-toggle');
-      const html = document.documentElement;
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        var html = document.documentElement;
 
-      function setTheme(theme) {
-        if (theme === 'dark') {
-          html.setAttribute('data-theme', 'dark');
-          btn.textContent = 'Light';
-          localStorage.setItem('theme', 'dark');
-        } else {
-          html.removeAttribute('data-theme');
-          btn.textContent = 'Dark';
-          localStorage.setItem('theme', 'light');
+        // What the reader is actually looking at right now: an explicit choice
+        // if there is one, otherwise whatever the OS resolved to.
+        function resolved() {
+          var explicit = html.getAttribute('data-theme');
+          if (explicit) return explicit;
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-      }
 
-      // Initialize from localStorage or system
-      const saved = localStorage.getItem('theme');
-      if (saved) {
-        setTheme(saved);
-      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setTheme('dark');
-      } else {
-        btn.textContent = 'Dark';
-      }
+        function paintLabel() {
+          var next = resolved() === 'dark' ? 'Light' : 'Dark';
+          btn.textContent = next;
+          btn.setAttribute('aria-label', 'Switch to ' + next.toLowerCase() + ' mode');
+        }
 
-      btn.addEventListener('click', () => {
-        const current = html.getAttribute('data-theme');
-        setTheme(current === 'dark' ? 'light' : 'dark');
-      });
+        paintLabel();
+
+        btn.addEventListener('click', function () {
+          var next = resolved() === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', next);
+          try { localStorage.setItem('theme', next); } catch (e) {}
+          paintLabel();
+        });
+
+        // Follow the OS while the reader has not chosen for themselves.
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+          if (!html.getAttribute('data-theme')) paintLabel();
+        });
+      })();
     </script>
 
     <script type="module">

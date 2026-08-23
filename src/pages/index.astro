@@ -1,11 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getGroups, seriesSlug } from '../lib/essays';
+import { getGroups, getStartHere, seriesSlug } from '../lib/essays';
 
 const groups = await getGroups();
+const { essay, seriesName, seriesFirst } = await getStartHere();
 ---
 
 <Layout description="A collection of stories and notes by Ashwin Kumar.">
+  <p class="start-here">
+    New here? Start with <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>, or read{' '}
+    <a href={`/series/${seriesSlug(seriesName)}/`}>{seriesName}</a> from{' '}
+    <a href={`/essays/${seriesFirst.id}/`}>the beginning</a>.
+  </p>
+
   {groups.map((group) => (
     <section class="category-group">
       <h2>
@@ -20,11 +27,10 @@ const groups = await getGroups();
         <p class="group-note">A sequence, best read in order.</p>
       )}
 
-      <ol class={group.kind === 'series' ? 'essay-list numbered' : 'essay-list'}>
+      <ol class={group.kind === 'series' ? 'essay-list compact numbered' : 'essay-list compact'}>
         {group.entries.map((essay) => (
           <li>
             <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
-            {essay.data.description && <p class="essay-blurb">{essay.data.description}</p>}
           </li>
         ))}
       </ol>
