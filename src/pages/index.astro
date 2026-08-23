@@ -1,45 +1,35 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import fs from 'fs/promises';
-import path from 'path';
+import { getGroups, seriesSlug } from '../lib/essays';
 
-const allEssays = await getCollection('essays');
-
-// Show all essays in a single list, newest first by file modification time.
-// This lets newly added Markdown files appear at the top without requiring a `date` frontmatter.
-async function withMtime(entries) {
-  const cwd = process.cwd();
-  const base = path.join(cwd, 'src', 'content', 'essays');
-  const out = [];
-  for (const e of entries) {
-    const filePath = path.join(base, `${e.id}.md`);
-    let mtime = 0;
-    try {
-      const st = await fs.stat(filePath);
-      mtime = st.mtimeMs || st.ctimeMs || 0;
-    } catch (err) {
-      // ignore missing stat, fall back to 0
-    }
-    out.push({ entry: e, mtime });
-  }
-  out.sort((a, b) => b.mtime - a.mtime);
-  return out.map(i => i.entry);
-}
-
-const sortedEssays = await withMtime(allEssays);
+const groups = await getGroups();
 ---
 
 <Layout description="A collection of stories and notes by Ashwin Kumar.">
-  
+  {groups.map((group) => (
+    <section class="category-group">
+      <h2>
+        {group.kind === 'series' ? (
+          <a href={`/series/${seriesSlug(group.name)}/`}>{group.label}</a>
+        ) : (
+          group.label
+        )}
+      </h2>
 
-  <ul class="essay-list">
-    {sortedEssays.map((essay) => (
-      <li>
-        <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
-      </li>
-    ))}
-  </ul>
+      {group.kind === 'series' && (
+        <p class="group-note">A sequence, best read in order.</p>
+      )}
+
+      <ol class={group.kind === 'series' ? 'essay-list numbered' : 'essay-list'}>
+        {group.entries.map((essay) => (
+          <li>
+            <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
+            {essay.data.description && <p class="essay-blurb">{essay.data.description}</p>}
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
 
   <hr />
 

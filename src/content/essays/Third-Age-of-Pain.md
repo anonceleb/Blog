@@ -1,6 +1,8 @@
 ---
 title: "Third Age of Pain"
-category: "Short Story"
+category: "Fiction"
+date: 2026-05-27
+order: 2
 description: "In the Museum of Extinct Sensations, an empathic AI named SELENA learns to calculate grief and chooses to become all versions of itself."
 ---
 

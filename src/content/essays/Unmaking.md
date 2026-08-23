@@ -1,6 +1,8 @@
 ---
 title: "Unmaking"
-category: "Short Story"
+category: "Fiction"
+date: 2026-05-27
+order: 1
 description: "On a planet where time and entropy run backwards, a xenolinguist must learn to think in reverse to survive the research mission."
 ---
 

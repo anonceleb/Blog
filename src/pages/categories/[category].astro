@@ -1,24 +1,23 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import { byRecency, categorySlug, seriesSlug } from '../../lib/essays';
 
 export async function getStaticPaths() {
-  const essays = await getCollection('essays');
-  const cats = [...new Set(essays.map(e => (e.data.category || 'Uncategorized').toLowerCase()))];
-  return cats.map((c) => ({ params: { category: c } }));
+  const all = await getCollection('essays');
+  const cats = [...new Set(all.map((e) => e.data.category))];
+  return cats.map((c) => ({ params: { category: categorySlug(c) }, props: { displayName: c } }));
 }
 
-const { category } = Astro.params;
+const { displayName } = Astro.props;
 const allEssays = await getCollection('essays');
 
 const filtered = allEssays
-  .filter((e) => (e.data.category || 'Uncategorized').toLowerCase() === category)
-  .sort((a, b) => a.data.title.localeCompare(b.data.title));
-
-const displayName = filtered[0]?.data.category || category;
+  .filter((e) => e.data.category === displayName)
+  .sort(byRecency);
 ---
 
-<Layout title={displayName} description={`Essays in the ${displayName} category.`}>
+<Layout title={displayName} description={`Stories in the ${displayName} category.`}>
   <h1>{displayName}</h1>
 
   <div class="category-nav">
@@ -26,12 +25,18 @@ const displayName = filtered[0]?.data.category || category;
   </div>
 
   {filtered.length === 0 ? (
-    <p>No essays yet in this category.</p>
+    <p>Nothing here yet.</p>
   ) : (
     <ul class="essay-list">
       {filtered.map((essay) => (
         <li>
           <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
+          {essay.data.series && (
+            <a class="series-tag" href={`/series/${seriesSlug(essay.data.series)}/`}>
+              {essay.data.series} · {essay.data.seriesOrder}
+            </a>
+          )}
+          {essay.data.description && <p class="essay-blurb">{essay.data.description}</p>}
         </li>
       ))}
     </ul>

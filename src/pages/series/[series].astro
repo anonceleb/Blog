@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { bySeriesOrder, seriesSlug } from '../../lib/essays';
+
+export async function getStaticPaths() {
+  const all = await getCollection('essays');
+  const names = [...new Set(all.map((e) => e.data.series).filter(Boolean))] as string[];
+  return names.map((name) => ({
+    params: { series: seriesSlug(name) },
+    props: { name, entries: all.filter((e) => e.data.series === name).sort(bySeriesOrder) },
+  }));
+}
+
+const { name, entries } = Astro.props;
+---
+
+<Layout title={name} description={`${name} — a sequence of ${entries.length} stories, in reading order.`}>
+  <h1>{name}</h1>
+  <p class="group-note">A sequence of {entries.length} stories, in reading order.</p>
+
+  <ol class="essay-list numbered">
+    {entries.map((essay) => (
+      <li>
+        <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
+        {essay.data.description && <p class="essay-blurb">{essay.data.description}</p>}
+      </li>
+    ))}
+  </ol>
+
+  <hr />
+  <p><a href="/">← All</a></p>
+</Layout>

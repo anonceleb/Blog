@@ -1,6 +1,9 @@
 ---
 title: "Binaries"
 category: "Fiction"
+date: 2026-05-27
+series: "The Mercy of Twinkling Stars"
+seriesOrder: 1
 description: "A man sustained by machines in a hospice above old Earth fights for his life through an AI surrogate in the final arbitration."
 ---
 

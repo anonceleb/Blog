@@ -371,3 +371,139 @@ footer a {
 .search-title { font-weight: 600; margin-bottom: 0.25rem; }
 .search-excerpt { color: var(--text-muted); font-size: 0.95rem; }
 .no-results { padding: 0.6rem; color: var(--text-muted); }
+
+/* --- Grouped index, series, and blurbs --- */
+
+.category-group h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.category-group h2 a:hover {
+  color: var(--link);
+}
+
+.group-note {
+  margin: -0.35rem 0 0.9rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.essay-list li {
+  margin-bottom: 1.15rem;
+}
+
+.essay-blurb {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 46em;
+}
+
+/* Numbered reading order for a series */
+.essay-list.numbered {
+  list-style: none;
+  counter-reset: instalment;
+}
+
+.essay-list.numbered li {
+  counter-increment: instalment;
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.essay-list.numbered li::before {
+  content: counter(instalment) ".";
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.series-tag {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.series-tag:hover {
+  color: var(--link);
+}
+
+/* Series context above a story title */
+.series-kicker {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.series-kicker a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.series-kicker a:hover {
+  color: var(--link);
+}
+
+/* Prev/next within a series */
+.series-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--hr);
+}
+
+.series-nav a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-width: 20em;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.series-nav-next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.series-nav-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.series-nav-title {
+  font-size: 1rem;
+}
+
+.series-nav a:hover .series-nav-title {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+@media (max-width: 34rem) {
+  .series-nav {
+    flex-direction: column;
+  }
+  .series-nav-next {
+    text-align: left;
+    margin-left: 0;
+  }
+}

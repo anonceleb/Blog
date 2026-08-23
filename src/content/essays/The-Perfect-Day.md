@@ -1,6 +1,8 @@
 ---
 title: "The Perfect Day"
-category: "Short Story"
+category: "Fiction"
+date: 2026-05-27
+order: 3
 description: "A man experiences the most productive, observant day of his life, finding poetry in the ordinary inefficiencies of the world."
 ---
 

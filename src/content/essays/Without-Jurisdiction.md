@@ -1,6 +1,9 @@
 ---
 title: "Without Jurisdiction"
-category: "Short Story"
+category: "Fiction"
+date: 2026-08-23
+series: "The Mercy of Twinkling Stars"
+seriesOrder: 3
 description: "The complete closed file of an orbital hospice's arbitration committee, which was asked to rule on a patient who answered neither yes nor no, and which discovered it could not."
 ---
 

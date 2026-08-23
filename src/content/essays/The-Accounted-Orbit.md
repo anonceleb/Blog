@@ -1,6 +1,8 @@
 ---
 title: "The Accounted Orbit"
 category: "Personal"
+date: 2026-05-27
+order: 4
 description: "A personal reflection on a father's quiet lessons in grace, measurement, and carrying pain through the final orbit of life."
 ---
 

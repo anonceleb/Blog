@@ -19,8 +19,20 @@ async function build() {
       const description = parsed.data.description || '';
       const content = (parsed.content || '').replace(/\n+/g, ' ').replace(/[#>*`\[\]]/g, ' ').trim();
       const excerpt = description || content.slice(0, 250);
-      items.push({ title, slug, url: `/essays/${slug}/`, excerpt });
+      items.push({
+        title,
+        slug,
+        url: `/essays/${slug}/`,
+        excerpt,
+        category: parsed.data.category || 'Fiction',
+        series: parsed.data.series || null,
+        seriesOrder: parsed.data.seriesOrder ?? null,
+        date: parsed.data.date ? new Date(parsed.data.date).toISOString().slice(0, 10) : null,
+      });
     }
+
+    // Newest first so search results are in a stable, meaningful order.
+    items.sort((a, b) => (b.date || '').localeCompare(a.date || '') || a.title.localeCompare(b.title));
 
     await fs.mkdir(outDir, { recursive: true });
     await fs.writeFile(path.join(outDir, 'search.json'), JSON.stringify(items, null, 2), 'utf8');

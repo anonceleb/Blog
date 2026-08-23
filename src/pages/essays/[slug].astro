@@ -1,22 +1,32 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import { bySeriesOrder, categorySlug, seriesSlug } from '../../lib/essays';
 
 export async function getStaticPaths() {
   const essays = await getCollection('essays');
-  return essays.map((entry) => ({
-    params: { slug: entry.id },
-    props: { entry },
-  }));
+  return essays.map((entry) => {
+    const siblings = entry.data.series
+      ? essays.filter((e) => e.data.series === entry.data.series).sort(bySeriesOrder)
+      : [];
+    const i = siblings.findIndex((e) => e.id === entry.id);
+    return {
+      params: { slug: entry.id },
+      props: {
+        entry,
+        siblings,
+        prev: i > 0 ? siblings[i - 1] : null,
+        next: i >= 0 && i < siblings.length - 1 ? siblings[i + 1] : null,
+      },
+    };
+  });
 }
 
-const { entry } = Astro.props;
+const { entry, siblings, prev, next } = Astro.props;
 const { Content, headings } = await render(entry);
 
 const hasToc = headings.length >= 3;
-const formattedDate = entry.data.date
-  ? new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: 'numeric' }).format(entry.data.date)
-  : null;
+const series = entry.data.series;
 ---
 
 <Layout
@@ -27,17 +37,14 @@ const formattedDate = entry.data.date
 >
   <article>
     <div class="post-header">
+      {series && (
+        <div class="series-kicker">
+          <a href={`/series/${seriesSlug(series)}/`}>{series}</a>
+          <span> · {entry.data.seriesOrder} of {siblings.length}</span>
+        </div>
+      )}
       <h1>{entry.data.title}</h1>
-      {formattedDate && (
-        <div class="post-date">
-          {formattedDate} · <a href="/">See all</a>
-        </div>
-      )}
-      {!formattedDate && (
-        <div class="post-date">
-          <a href="/">See all</a>
-        </div>
-      )}
+      <div class="post-date"><a href="/">See all</a></div>
     </div>
 
     {hasToc && (
@@ -56,17 +63,30 @@ const formattedDate = entry.data.date
     <Content />
   </article>
 
+  {series && (prev || next) && (
+    <nav class="series-nav" aria-label={`More in ${series}`}>
+      {prev ? (
+        <a class="series-nav-prev" href={`/essays/${prev.id}/`}>
+          <span class="series-nav-label">Previous in this series</span>
+          <span class="series-nav-title">{prev.data.title}</span>
+        </a>
+      ) : <span />}
+      {next && (
+        <a class="series-nav-next" href={`/essays/${next.id}/`}>
+          <span class="series-nav-label">Next in this series</span>
+          <span class="series-nav-title">{next.data.title}</span>
+        </a>
+      )}
+    </nav>
+  )}
+
   <hr />
 
   <p style="font-size: 0.9rem;">
     <a href="/">← All</a>
-    {entry.data.category && (
-      <>
-        {' '}·{' '}
-        <a href={`/categories/${encodeURIComponent(entry.data.category.toLowerCase())}/`}>
-          More in {entry.data.category}
-        </a>
-      </>
-    )}
+    {' '}·{' '}
+    <a href={`/categories/${categorySlug(entry.data.category)}/`}>
+      More in {entry.data.category}
+    </a>
   </p>
 </Layout>

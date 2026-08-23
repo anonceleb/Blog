@@ -1,6 +1,9 @@
 ---
 title: "The Null Value"
-category: "Short Story"
+category: "Fiction"
+date: 2026-08-23
+series: "The Mercy of Twinkling Stars"
+seriesOrder: 2
 description: "In the hospice above old Earth, a paralysed man answers the arbitration question with neither yes nor no, and the system encounters a state it has no name for."
 ---
 
